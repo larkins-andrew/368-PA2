@@ -13,6 +13,7 @@ static char * getStr(FILE * f);
 static void poRecur(FILE * f, bNode * n);
 static int getHeight(bNode * n);
 static int getWidth(bNode * n);
+static void PCKrecur(FILE * f, bNode * n, int dim[2]);
 
 bNode * loadPR(char * filename){
   FILE * f = fopen(filename, "r");
@@ -152,24 +153,34 @@ void printPCK(char * filename, bNode * head){
     return;
   }
 
-  if (head -> value = 'H'){
-    PCKrecur(f, head -> left, (int *) {0, head -> right -> dim [1]});
-    PCKrecur(f, head -> right, (int *) {0,0});
+  if (head -> value == 'H'){
+    PCKrecur(f, head -> left, (int[]) {0, head -> right -> dim [1]});
+    PCKrecur(f, head -> right, (int[]) {0,0});
   }
-  if(head -> value = 'V'){
-    PCKrecur(f, head -> left, (int *) {0,0});
-    PCKrecur(f, head -> right, (int *) {head -> right -> dim [0], 0});
+  if(head -> value == 'V'){
+    PCKrecur(f, head -> left, (int[]) {0,0});
+    PCKrecur(f, head -> right, (int[]) {head -> right -> dim [0], 0});
   }
 }
 
-static void PCKrecur(FILE * f, bNode * n, int * dim){
+static void PCKrecur(FILE * f, bNode * n, int dim[2]){
   // dim refurs 
-  if(!n || isLeaf(n)){
+  if (!n){
     return;
   }
-  if (isLeaf(n -> left)){
-    bNode * l = n -> left;
-
-    fprintf(f, "%d((%d,%d)(%d,%d))", l -> value, l -> dim[0], l -> dim[1], );
+  if (isLeaf(n)){
+    fprintf(f, "%d((%d,%d)(%d,%d))\n", n -> value, n -> dim[0], n -> dim[1], dim[0], dim[1]);
+    return;
+  }
+  else{
+    if (n -> value == 'V'){
+      PCKrecur(f, n -> left, dim);
+      PCKrecur(f, n -> right, (int[]) {dim[0] + n -> left -> dim[0], dim[1]});
+    }
+    else if (n -> value == 'H')
+    {
+      PCKrecur(f, n -> left, (int[]) {dim[0], dim[1] + n -> right -> dim[1]});
+      PCKrecur(f, n -> right, dim);
+    } 
   }
 }

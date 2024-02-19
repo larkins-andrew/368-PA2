@@ -14,16 +14,19 @@ int main (int argc, char ** argv){
   char * f_in;
   char * f_out1;
   char * f_out2;
+  char * f_out3;
   //char * f_out3;
   if (argc == 1){
-    f_in = "examples/3.pr";
-    f_out1 = "3.po";
-    f_out2 = "3.dim";
+    f_in = "examples/8.pr";
+    f_out1 = "8.po";
+    f_out2 = "8.dim";
+    f_out3 = "8.pck";
   }
   else{
     f_in = argv[1];
     f_out1 = argv[2];
     f_out2 = argv[3];
+    f_out3 = argv[4];
   }
   // char * f_in =   argv[1];
   // char * f_out1 = argv[2];
@@ -37,7 +40,7 @@ int main (int argc, char ** argv){
   }
   printPO(f_out1, head);
   printDIM(f_out2, head);
-
+  printPCK(f_out3, head);
   freeTree(head);
   return EXIT_FAILURE;
 }
