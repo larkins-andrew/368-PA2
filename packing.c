@@ -17,7 +17,9 @@ static void PCKrecur(FILE * f, bNode * n, int dim[2]);
 
 bNode * loadPR(char * filename){
   FILE * f = fopen(filename, "r");
-  return parsePR(f);
+  bNode * head = parsePR(f);
+  fclose(f);
+  return head;
 }
 
 static char * getStr(FILE * f){
@@ -76,6 +78,7 @@ void printPO(char * filename, bNode * head){
     return;
   }
   poRecur(f, head);
+  fclose(f);
 }
 static void poRecur(FILE * f, bNode * n){
   if(!n){
@@ -161,6 +164,7 @@ void printPCK(char * filename, bNode * head){
     PCKrecur(f, head -> left, (int[]) {0,0});
     PCKrecur(f, head -> right, (int[]) {head -> right -> dim [0], 0});
   }
+  fclose(f);
 }
 
 static void PCKrecur(FILE * f, bNode * n, int dim[2]){
