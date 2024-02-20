@@ -7,40 +7,42 @@
   _printErr(str, __FILE__, __LINE__)
 
 int main (int argc, char ** argv){
-  // if (argc != 5){
-  //     printErr("Err: argc != 4");
-  //     return EXIT_FAILURE;
-  // }
-  char * f_in;
-  char * f_out1;
-  char * f_out2;
-  char * f_out3;
-  //char * f_out3;
-  if (argc == 1){
-    f_in = "examples/8.pr";
-    f_out1 = "8.po";
-    f_out2 = "8.dim";
-    f_out3 = "8.pck";
+  if (argc != 5){
+      printErr("Err: argc != 4");
+      return EXIT_FAILURE;
   }
-  else{
-    f_in = argv[1];
-    f_out1 = argv[2];
-    f_out2 = argv[3];
-    f_out3 = argv[4];
+  FILE * f_in =   fopen(argv[1], "r");
+  if (!f_in){
+    return EXIT_FAILURE;
   }
-  // char * f_in =   argv[1];
-  // char * f_out1 = argv[2];
-  // char * f_out2 = argv[3];
-  // char * f_out3 = argv[4];
+  FILE * f_out1 = fopen(argv[2], "w");
+  if (!f_out1) {
+    fclose(f_in);
+    return EXIT_FAILURE;
+  }
+  FILE * f_out2 = fopen(argv[3], "w");
+  if (!f_out2) {
+    fclose(f_in);
+    fclose(f_out1);
+    return EXIT_FAILURE;
+  }
+  FILE * f_out3 = fopen(argv[4], "w");
+  if (!f_out3) {
+    fclose(f_in);
+    fclose(f_out1);
+    fclose(f_out2);
+    return EXIT_FAILURE;
+  }
 
   bNode * head = loadPR(f_in);
   if (!head) {
     printErr("Err: loadTree returns NULL");
     return EXIT_FAILURE;
   }
-  printPO(f_out1, head);
-  printDIM(f_out2, head);
-  printPCK(f_out3, head);
+
+  printPO(f_out1, head)
+  printDIM(f_out2, head)
+  printPCK(f_out3, head)
   freeTree(head);
-  return EXIT_FAILURE;
+  return EXIT_SUCCESS;
 }

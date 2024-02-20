@@ -15,9 +15,9 @@ static int getHeight(bNode * n);
 static int getWidth(bNode * n);
 static void PCKrecur(FILE * f, bNode * n, int dim[2]);
 
-bNode * loadPR(char * filename){
-  FILE * f = fopen(filename, "r");
-  return parsePR(f);
+bNode * loadPR(FILE * f){
+  bNode * head = parsePR(f);
+  return head;
 }
 
 static char * getStr(FILE * f){
@@ -70,12 +70,9 @@ static bNode * parsePR(FILE * f){
   return node;
 }
 
-void printPO(char * filename, bNode * head){
-  FILE * f = fopen(filename, "w");
-  if (!f){
-    return;
-  }
+void printPO(FILE * f, bNode * head){
   poRecur(f, head);
+  return 1;
 }
 static void poRecur(FILE * f, bNode * n){
   if(!n){
@@ -96,12 +93,11 @@ static void poRecur(FILE * f, bNode * n){
   }
 }
 
-void printDIM(char * filename, bNode * head){
+void printDIM(FILE * f, bNode * head){
   getWidth(head);
   getHeight(head);
   //PRINT TO FILE
-  printPO(filename, head);
-  return;
+  printPO(f, head);
 }
 
 static int getWidth(bNode * n){
@@ -144,23 +140,20 @@ static int getHeight(bNode * n){
   }
 }
 
-void printPCK(char * filename, bNode * head){
+void printPCK(FILE * f, bNode * head){
   if (isLeaf(head)){
-    return;
+    return -1;
   }
-  FILE * f = fopen(filename, "w");
-  if (!f){
-    return;
-  }
-
-  if (head -> value == 'H'){
-    PCKrecur(f, head -> left, (int[]) {0, head -> right -> dim [1]});
-    PCKrecur(f, head -> right, (int[]) {0,0});
-  }
-  if(head -> value == 'V'){
-    PCKrecur(f, head -> left, (int[]) {0,0});
-    PCKrecur(f, head -> right, (int[]) {head -> right -> dim [0], 0});
-  }
+  PCKrecur(f, head, (int[]) {0,0});
+  // if (head -> value == 'H'){
+  //   PCKrecur(f, head -> left, (int[]) {0, head -> right -> dim [1]});
+  //   PCKrecur(f, head -> right, (int[]) {0,0});
+  // }
+  // if(head -> value == 'V'){
+  //   PCKrecur(f, head -> left, (int[]) {0,0});
+  //   PCKrecur(f, head -> right, (int[]) {head -> right -> dim [0], 0});
+  // }
+  return 1;
 }
 
 static void PCKrecur(FILE * f, bNode * n, int dim[2]){
